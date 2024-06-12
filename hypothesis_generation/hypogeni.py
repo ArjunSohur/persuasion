@@ -2,5 +2,5 @@
 
 
 
-def chai_hypogeni(init_sample, training_sample, llm):
+def chai_hypogeni_alg(init_sample, training_sample, llm):
     pass
