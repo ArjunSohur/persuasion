@@ -35,21 +35,18 @@ def get_success_posts_reply_to_text(path_to_db) -> list:
     cur = con.cursor()
 
     pairs = []
-    ids = get_ids("SELECT id, reply_to, root_id FROM CMV WHERE success = 1, root_id=reply_to", path_to_db)
+    ids = get_ids("SELECT id, root_id FROM CMV WHERE success = 1 AND root_id=reply_to", path_to_db)
 
     for id in ids:
-        ut_id, reply_to, root_id = id
+        ut_id, root_id = id
 
         ut_cur = cur.execute(f"SELECT text FROM CMV WHERE id = '{ut_id}'")
         ut_text = ut_cur.fetchone()[0]
 
-        reply_to_cur = cur.execute(f"SELECT text FROM CMV WHERE id = '{reply_to}'")
-        reply_to_text = reply_to_cur.fetchone()[0]
-
         root_cur = cur.execute(f"SELECT text FROM CMV WHERE id = '{root_id}'")
         root_text = root_cur.fetchone()[0]
 
-        pairs.append((ut_text, reply_to_text, root_text))
+        pairs.append((ut_text, root_text))
 
     return pairs
 

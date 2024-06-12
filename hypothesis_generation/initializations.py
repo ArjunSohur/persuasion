@@ -19,8 +19,8 @@ def sample_from_training_pairs(pairs, n):
     ret = []
 
     for sample in sampled:
-        ut, reply, root = sample
-        ret.append(ut, reply, root)
+        ut, root = sample
+        ret.append((ut, root))
     
     return ret
     
@@ -34,14 +34,15 @@ def sample_from_training_pairs(pairs, n):
 # ---------------------------------------------------------------------------- #
 
 def load_training_data():
-    print("Retreiving successful (utterance, reply to, root text) tuples")
+    print("Retreiving successful (utterance, root text) tuples")
     training_pairs = get_success_posts_reply_to_text("CMV.db")
-    training_pairs = training_pairs.shuffle()
+
+    random.shuffle(training_pairs)
 
     init_pairs = training_pairs[:2]
     train_pairs = sample_from_training_pairs(training_pairs[2:], 8)
 
-    print("Retreived successful (utterance, reply to, root text) tuples\n")
+    print("Retreived successful (utterance, root text) tuples\n")
 
     print("Number of succesful arguments:", len(training_pairs))
 
