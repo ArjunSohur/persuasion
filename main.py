@@ -17,6 +17,6 @@ if __name__ == "__main__":
     else:
         print("Not creating database")
     
-    print(len(get_op_posts("CMV.db")))
+    
 
        
