@@ -1,5 +1,5 @@
-from db_creator import main_db_creator
-from fetcher import get_op_posts
+from db_creation.db_creator import main_db_creator
+from db_creation.fetcher import get_op_posts
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
