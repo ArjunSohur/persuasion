@@ -1,0 +1,4 @@
+# No database nor model - those are too big for github
+# Running the code will produce them for you
+CMV.db
+winning-args-corpus/*
