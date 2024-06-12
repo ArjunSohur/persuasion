@@ -14,8 +14,8 @@ def create_db():
     conn: sqlite3.Connection = sqlite3.connect("CMV.db")
     c: sqlite3.Cursor = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS CMV
-                (rootid TEXT PRIMARY KEY, 
-                id TEXT,
+                (id TEXT PRIMARY KEY, 
+                root id TEXT,
                 reply_to TEXT,
                 success INTEGER,
                 speaker_id TEXT,
@@ -23,10 +23,10 @@ def create_db():
     conn.commit()
     conn.close()
 
-def store_in_db(rootid, id, reply_to, success, speaker_id, text):
+def store_in_db(id, rootid, reply_to, success, speaker_id, text):
     conn: sqlite3.Connection = sqlite3.connect("CMV.db")
     c: sqlite3.Cursor = conn.cursor()
-    c.execute("INSERT OR IGNORE INTO CMV VALUES (?, ?, ?, ?, ?, ?)", (rootid, id, reply_to, success, speaker_id, text))
+    c.execute("INSERT OR IGNORE INTO CMV VALUES (?, ?, ?, ?, ?, ?)", (id, rootid, reply_to, success, speaker_id, text))
     conn.commit()
     conn.close()
 
@@ -68,16 +68,17 @@ def process(corpus):
     utterances = list(corpus.iter_utterances())
     lengths = len(utterances)
 
-    roots = [None]* lengths
     ids = [None]* lengths
+    roots = [None]* lengths
     replies_to = [None]* lengths
     successes = [None]* lengths
     speaker_ids = [None]* lengths
     text = [None]* lengths
 
     for index, utterance in enumerate(utterances):
-        roots[index] = utterance.conversation_id + ' ' + str(index)
         ids[index] = utterance.id
+        roots[index] = utterance.conversation_id
+
         replies_to[index] = utterance.reply_to
 
         temp_success = utterance.meta["success"]
@@ -88,7 +89,7 @@ def process(corpus):
     
     print("Successfully processed data\n")
     
-    return roots, ids, replies_to, successes, speaker_ids, text
+    return ids, roots, replies_to, successes, speaker_ids, text
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
@@ -97,10 +98,10 @@ def process(corpus):
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-def store_data(roots, ids, replies_to, successes, speaker_ids, text):
+def store_data(ids, roots, replies_to, successes, speaker_ids, text):
     print("Storing data")
-    for index in range(len(roots)):
-        store_in_db(roots[index], ids[index], replies_to[index], \
+    for index in range(len(ids)):
+        store_in_db(ids[index], roots[index], replies_to[index], \
                     successes[index], speaker_ids[index], text[index])
     print("Successfully stored data\n")
 
@@ -115,8 +116,8 @@ def store_data(roots, ids, replies_to, successes, speaker_ids, text):
 def main_db_creater():
     create_db()
     corpus = load_data()
-    roots, ids, replies_to, successes, speaker_ids, text = process(corpus)
-    store_data(roots, ids, replies_to, successes, speaker_ids, text)
+    ids, roots, replies_to, successes, speaker_ids, text = process(corpus)
+    store_data(ids, roots, replies_to, successes, speaker_ids, text)
 
 # Main execution
 if __name__ == "__main__":
