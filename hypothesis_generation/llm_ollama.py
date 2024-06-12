@@ -13,11 +13,35 @@ those are more robust.
 """
 
 import ollama
+from ollama import _client, _types
+
+def handle_expection(e, llm) -> bool:
+    print(f"Error: {e}")
+    if 'not found' in str(e):
+        try:
+            print(f"\t{llm} not found - Attempting to pull {llm}")
+            s = ollama.pull(llm)
+            print(f"\tDownload status: {s}")
+            return True
+        except e:
+            print(f"Failed to pull {llm}")
+            return False
+        
+    print("inferece failed")
+    return False
 
 def inference_llm(llm: str, prompt: str):
-    response = ollama.chat(
-    model=llm,
-    messages=[{'role': 'user', 'content': prompt}])
+    try_inference = True
 
-    return response
+    while try_inference:
+        print("Attempting inference")
+        try:
+            response = ollama.chat(
+            model=llm,
+            messages=[{'role': 'user', 'content': prompt}])
+            try_inference = False
+        except _types.ResponseError as e:
+            try_inference = handle_expection(e, llm)
+            
+    return response['message']['content']
 

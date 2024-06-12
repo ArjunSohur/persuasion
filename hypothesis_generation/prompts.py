@@ -16,5 +16,12 @@ def get_hypothesis_generation_prompt(reply, op):
         are persuasive', 'arguments that question the premise are persuasive',
          'arguments that appeal to emotion are persuasive', etc.
 
+        Please keep it to one sentence and do not discuss the specific example
+          - in other words, keep if breif.
+        
+        start your response with 'Arguments that...' and then continue
+
         You are very determined to find the single best hypothesis.
         """
+    
+    return s

@@ -113,7 +113,12 @@ def store_data(ids, roots, replies_to, successes, speaker_ids, text):
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-def main_db_creator():
+def main_db_creator(do_it: bool = True):
+
+    if not do_it:
+        print("Not creating database")
+        return
+
     create_db()
     corpus = load_data()
     ids, roots, replies_to, successes, speaker_ids, text = process(corpus)

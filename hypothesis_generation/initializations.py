@@ -42,9 +42,9 @@ def load_training_data():
     init_pairs = training_pairs[:2]
     train_pairs = sample_from_training_pairs(training_pairs[2:], 8)
 
-    print("Retreived successful (utterance, root text) tuples\n")
+    print("Retreived successful (utterance, root text) tuples")
 
-    print("Number of succesful arguments:", len(training_pairs))
+    print("Number of succesful arguments:", len(training_pairs), "\n")
 
     return init_pairs, train_pairs
 
