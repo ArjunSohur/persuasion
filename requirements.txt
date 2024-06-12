@@ -1,1 +1,2 @@
 convokit==3.0.0
+ollama==0.2.1
