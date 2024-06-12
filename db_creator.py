@@ -15,7 +15,7 @@ def create_db():
     c: sqlite3.Cursor = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS CMV
                 (id TEXT PRIMARY KEY, 
-                root id TEXT,
+                root_id TEXT,
                 reply_to TEXT,
                 success INTEGER,
                 speaker_id TEXT,
@@ -113,7 +113,7 @@ def store_data(ids, roots, replies_to, successes, speaker_ids, text):
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-def main_db_creater():
+def main_db_creator():
     create_db()
     corpus = load_data()
     ids, roots, replies_to, successes, speaker_ids, text = process(corpus)
@@ -121,4 +121,4 @@ def main_db_creater():
 
 # Main execution
 if __name__ == "__main__":
-    main_db_creater()
+    main_db_creator()
