@@ -1,7 +1,7 @@
 
 from .prompts import get_hypothesis_generation_prompt, get_inference_argument_prompt, get_new_hypothesis_generation_prompt
 from .llm_ollama import inference_llm
-from .embed import load_custom_model
+from .embed import load_custom_sentence_transformer
 import random
 from math import sqrt, log
 
@@ -121,11 +121,10 @@ def get_worst(worst, n=3):
     return x, y
 
 
-
 def hypogenic(S_init, S, llm):
     n = 1
     alpha = .5
-    embedder = load_custom_model("Alibaba-NLP/gte-large-en-v1.5", "embedder_cache")
+    embedder = load_custom_sentence_transformer("Alibaba-NLP_gte-large-en-v1.5")
     max_regret = 2
 
     H = init_H(S_init, llm)
