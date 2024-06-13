@@ -1,3 +1,9 @@
+TODO:
+ - debug hypogenic
+ - create different methods of inference
+ - improve algorithm
+
+
 Way to make sense of the CMV dataset.
 
 Original corpus found at: https://convokit.cornell.edu/documentation/winning.html#
