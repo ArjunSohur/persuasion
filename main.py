@@ -20,10 +20,9 @@ if __name__ == "__main__":
     
     hypothesis = chai_hypogeni_alg(inital_pairs, train_pairs, "llama3")
 
-    print("Hypothesis bank")
+    print("\n\nHypothesis bank:")
     for h in hypothesis:
-        print(h)
-        print("\n")
+        print("\t -", h)
 
     
     
