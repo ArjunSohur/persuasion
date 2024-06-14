@@ -30,18 +30,27 @@ def handle_expection(e, llm) -> bool:
     print("inferece failed")
     return False
 
-def inference_llm(llm: str, prompt: str):
+def inference_llm(llm: str, prompt: str, sys_prompt: str = None):
     try_inference = True
 
     while try_inference:
         print("\t\tAttempting inference")
-        try:
-            response = ollama.chat(
-            model=llm,
-            messages=[{'role': 'user', 'content': prompt}])
-            try_inference = False
-        except _types.ResponseError as e:
-            try_inference = handle_expection(e, llm)
+        if  not sys_prompt:
+            try:
+                response = ollama.chat(
+                model=llm,
+                messages=[{'role': 'user', 'content': prompt}])
+                try_inference = False
+            except _types.ResponseError as e:
+                try_inference = handle_expection(e, llm)
+        else:
+            try:
+                response = ollama.chat(
+                model=llm,
+                messages=[{'role': 'system', 'content': sys_prompt}, {'role': 'user', 'content': prompt}])
+                try_inference = False
+            except _types.ResponseError as e:
+                try_inference = handle_expection(e, llm)
             
     return response['message']['content']
 

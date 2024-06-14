@@ -33,14 +33,14 @@ def sample_from_training_pairs(pairs, n):
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 
-def load_training_data():
+def load_training_data(num_init_pairs:int = 2, num_train_pairs:int = 3):
     print("Retreiving successful (utterance, root text) tuples")
     training_pairs = get_success_posts_reply_to_text("CMV.db")
 
     random.shuffle(training_pairs)
 
-    init_pairs = training_pairs[:2]
-    train_pairs = sample_from_training_pairs(training_pairs[2:], 3)
+    init_pairs = training_pairs[:num_init_pairs]
+    train_pairs = sample_from_training_pairs(training_pairs[num_init_pairs:], num_train_pairs)
 
     print("Retreived successful (utterance, root text) tuples")
 

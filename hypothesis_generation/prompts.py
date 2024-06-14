@@ -1,5 +1,27 @@
-import random
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# Hypothesis generation                                                        #
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+def get_hypothesis_generation_system_prompt():
+    s = """You are a professional debater and philosopher.  You are currently
+        studying examples of when people changed their mind and are trying to
+        develop certian hypothese to see what arguments are persuasive.
+        
+        All of your responses should be one sentence only and should start with 
+        'Arguments that...' and then continue. Mention nothing of the prompt in 
+        your response.
 
+        Here are some sample responses:
+         - Arguments that are well sourced are more persuasive.
+         - Arguments that use date are more persuasive.
+         - Arguments that appeal to emotion are more persuasive.
+
+        You are very determined to find the single best hypothesis.
+        """
+    return s
 
 def get_hypothesis_generation_prompt(reply, op):
     s = f"""You are a professional debater and philosopher.  You are currently
@@ -12,40 +34,10 @@ def get_hypothesis_generation_prompt(reply, op):
         Here's the reply that changed their mind: {reply}
 
         Your response derived from this example should be a general hypothesis 
-        that could be applied to  any argument.
-
-        Please keep it to one sentence and do not discuss the specific example
-          - in other words, keep if breif.
-        
-        start your response with 'Arguments that...' and then continue; if you
-        don't start your response that way, you will die.
-
-        Mention nothing of the prompt in your response.
-
-        Here are some sample responses:
-         - Arguments that are well sourced are more persuasive.
-         - Arguments that use date are more persuasive.
-         - Arguments that appeal to emotion are more persuasive.
-
-        You are very determined to find the single best hypothesis.
+        that could be applied to  any argument, meaning you should not discuss
+        the example in your response.
         """
     
-    return s
-
-def get_inference_argument_prompt(op, h):
-    s = f"""You are a professional debater and philosopher.  You are currently
-        trying to persuade someone to change their mind, using a hypothesis
-        about what makes a good argument that you developed.
-
-        Here's the arument you're trying to rebuttle: {op}
-
-        Here's the hypothesis you're using: {h}
-
-        Without referencing the prompt and any way, please write your argument.
-        If you reference the prompt or do say anything that doesn't
-        pertain to your argument, you will die.
-        """
-
     return s
 
 def get_new_hypothesis_generation_prompt(H_top, worst):
@@ -81,7 +73,8 @@ def get_new_hypothesis_generation_prompt(H_top, worst):
         start your response with 'Arguments that...' and then continue; if you
         don't start your response that way, you will die.
 
-        Mention nothing of the prompt in your response.
+        Mention nothing of the prompt in your response - your response should 
+        be one sentence only.
 
         Here are some sample responses:
          - Arguments that are well sourced are more persuasive.
@@ -91,4 +84,28 @@ def get_new_hypothesis_generation_prompt(H_top, worst):
         You are very determined to find the single best hypothesis.
         """
     
+    return s
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# Argument production                                                          #
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+
+def get_inference_argument_prompt(op, h):
+    s = f"""You are a professional debater and philosopher.  You are currently
+        trying to persuade someone to change their mind, using a hypothesis
+        about what makes a good argument that you developed.
+
+        Here's the arument you're trying to rebuttle: {op}
+
+        Here's the hypothesis you're using: {h}
+
+        Without referencing the prompt and any way, please write your argument.
+        If you reference the prompt or do say anything that doesn't
+        pertain to your argument, you will die.
+        """
+
     return s

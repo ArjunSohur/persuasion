@@ -1,5 +1,5 @@
 
-from .prompts import get_hypothesis_generation_prompt, get_inference_argument_prompt, get_new_hypothesis_generation_prompt
+from .prompts import get_hypothesis_generation_prompt, get_inference_argument_prompt, get_new_hypothesis_generation_prompt, get_hypothesis_generation_system_prompt
 from .llm_ollama import inference_llm
 from .embed import load_custom_sentence_transformer
 import random
@@ -18,8 +18,9 @@ def init_H(S_init, llm):
     for s in S_init:
         rep, op = s
         prompt = get_hypothesis_generation_prompt(rep, op)
+        sys_prompt = get_hypothesis_generation_system_prompt()
 
-        response = inference_llm(llm, prompt)
+        response = inference_llm(llm, prompt, sys_prompt=sys_prompt)
 
         H.append(response)
     
@@ -243,7 +244,8 @@ Variables:
 
     worst: list of the worst performing pairs with the current hypothesis
 """
-def hypogenic(S_init, S, llm):
+
+def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-large-en-v1.5", max_r=.4):
     """
     Hypothesis generation for persuasion
 
@@ -255,10 +257,12 @@ def hypogenic(S_init, S, llm):
     Returns:
         H: list of hypotheses
     """
-    n = 1
-    alpha = 0.2
-    embedder = load_custom_sentence_transformer("Alibaba-NLP_gte-large-en-v1.5")
-    max_regret = .4
+
+    # hyperparameters
+    n = topn
+    alpha = a
+    embedder = load_custom_sentence_transformer(embedder_name)
+    max_regret = max_r
 
     print("Initializing hypotheses...")
     H = init_H(S_init, llm)
@@ -319,8 +323,10 @@ def hypogenic(S_init, S, llm):
             
             new_h_top = H_top(H_rewardscore, n, H)
             prompt = get_new_hypothesis_generation_prompt(new_h_top, worst_3)
+            sys_prompt = get_hypothesis_generation_system_prompt()
 
-            new_h = inference_llm(llm, prompt)
+            new_h = inference_llm(llm, prompt, sys_prompt=sys_prompt)
+            
             print(f"{t}: Generated new hypothesis: '{new_h[:100]}'")
 
             H.append(new_h)
