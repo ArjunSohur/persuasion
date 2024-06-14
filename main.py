@@ -13,16 +13,16 @@ from hypothesis_generation.hypogeni import hypogenic
 # ---------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
+    print("NOTE: TO RUN THIS CODE, YOU MUST HAVE THE OLLAMA APP INSTALLED")
+    print("https://www.ollama.com/")
+    print("Ollama helps run the llm locally - alternaltively, you can edit hypothesis_generation/llm_ollama.py to use whatever method of llm inference you prefer.\n\n")
+
     create = 0
     main_db_creator(create)
 
     inital_pairs, train_pairs = load_training_data()
     
     hypothesis = hypogenic(inital_pairs, train_pairs, "llama3")
-
-    print("\n\nHypothesis bank:")
-    for h in hypothesis:
-        print("\t -", h)
 
     
     

@@ -85,7 +85,7 @@ def remove_duplicates(H: list, H_vecs: dict):
                 norms = sqrt(vector @ vector) * sqrt(vector_2 @ vector_2)
                 css = (vector @ vector_2) / norms
 
-                if css > .95: # hyperparam
+                if css > .90: # hyperparam
                     # remove h_i from H and H_vecs
 
                     print(f"\nRemoving '{h_i}' from hypotheses - too similar to '{hypothesis}'")
@@ -200,12 +200,17 @@ def reward(h_i, x_visited, y_visited, y_vectors, abs_S_i, t, alpha, embedder, ll
 
     r_i = numerator / denominator + exploration
 
-    regret = len(x_visited)/denominator - r_i + exploration
+    regret_mag = len(x_visited)/denominator - r_i + exploration
 
     while ("", "", 10000000)in worst:
         worst.remove(("", "", 10000000))
 
-    return r_i, regret, list(set(worst))
+    normalizer = r_i + regret_mag
+
+    reward = r_i / normalizer
+    regret = regret_mag / normalizer
+
+    return reward, regret, list(set(worst))
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
@@ -253,7 +258,7 @@ def hypogenic(S_init, S, llm):
     n = 1
     alpha = 0.2
     embedder = load_custom_sentence_transformer("Alibaba-NLP_gte-large-en-v1.5")
-    max_regret = .3
+    max_regret = .4
 
     print("Initializing hypotheses...")
     H = init_H(S_init, llm)
@@ -316,7 +321,7 @@ def hypogenic(S_init, S, llm):
             prompt = get_new_hypothesis_generation_prompt(new_h_top, worst_3)
 
             new_h = inference_llm(llm, prompt)
-            print(f"{t}: Generated new hypothesis: '{new_h}'")
+            print(f"{t}: Generated new hypothesis: '{new_h[:100]}'")
 
             H.append(new_h)
             S_i[new_h] = len(worst_3)
@@ -328,18 +333,13 @@ def hypogenic(S_init, S, llm):
             worst = update_worst(worst, new_h_worst)
 
             H_rewardscore.append((new_h, new_h_reward))
-            print(f"{t}: Updated hypothesis reward scores: {H_rewardscore}")
+            print(f"{t}: Updated hypothesis reward scores afer adding new hypothesis. First element: {H_rewardscore[0][1]}: {H_rewardscore[0][0][:100]}")
 
             H_vecs[new_h] = embedder.encode(new_h)
 
             H, H_vecs = remove_duplicates(H, H_vecs)
-            print(f"{t}: Hypotheses after removing duplicates: {H}")
 
         t += 1
-    
-    print("Final list of hypotheses:")
-    for hypothesis in H:
-        print(f"  - {hypothesis}")
     
     print("Hypothesis reward scores:")
     for h in H_rewardscore:
