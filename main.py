@@ -17,12 +17,14 @@ if __name__ == "__main__":
     print("https://www.ollama.com/")
     print("Ollama helps run the llm locally - alternaltively, you can edit hypothesis_generation/llm_ollama.py to use whatever method of llm inference you prefer.\n\n")
 
-    create = 0
-    main_db_creator(create)
+    main_db_creator(False) # don't want to create the database again
 
     inital_pairs, train_pairs = load_training_data()
     
-    hypothesis = hypogenic(inital_pairs, train_pairs, "llama3")
+    H_final = hypogenic(inital_pairs, train_pairs, "llama3")
+
+    with open("hypothesis.txt", "w") as f:
+        f.write("\n\n".join(H_final))
 
     
     
