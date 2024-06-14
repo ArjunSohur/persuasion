@@ -14,8 +14,20 @@ Now, I'll write high level pseudo-code to demonstrate how this algorithm works.
 
 <img width="381" alt="Screenshot 2024-06-13 at 9 39 52 PM" src="https://github.com/ArjunSohur/persuasion/assets/105809809/8b7a6a09-c9de-4a7a-828a-6d11ea5176e8">
 
-<img width="402" alt="Screenshot 2024-06-13 at 9 59 28 PM" src="https://github.com/ArjunSohur/persuasion/assets/105809809/5ee046d2-2fa9-45ef-a957-059d51f6f9ff">
+<img width="406" alt="Screenshot 2024-06-13 at 9 59 28 PM" src="https://github.com/ArjunSohur/persuasion/assets/105809809/5ee046d2-2fa9-45ef-a957-059d51f6f9ff">
 
+Key differences:
+ - regret used as a running tally and indicator of weakness of bank
+ - Keep track of worst performing samples in order to update the hypothesis bank with what it's missing
+ - We actually use the hypothese to generate an argument, then compare the generated argument with the known winning argument
+ - Instead of just sampling some \mathcal{S_i}, we actually iterate through all the sample pairs
+
+Obvious shortcomings:
+ - the loops are very inefficient
+ - the iterating trough the training pairs is ugly
+ - llm is raw, in this case (not fine tuned or pre-trained on arguments)
+ - llm is slow (about 20-30 sec per inference)
+ - Regret and reward grows as - I have not yet normalized them
 
 ### References and todo
 
