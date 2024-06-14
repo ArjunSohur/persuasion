@@ -2,3 +2,4 @@
 # Running the code will produce them for you
 CMV.db
 winning-args-corpus/*
+*/__pycache__/*

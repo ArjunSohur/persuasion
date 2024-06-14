@@ -12,15 +12,20 @@ def get_hypothesis_generation_prompt(reply, op):
         Here's the reply that changed their mind: {reply}
 
         Your response derived from this example should be a general hypothesis 
-        that could be applied to  any argument, e.g. 'arguments that use data 
-        are persuasive', 'arguments that question the premise are persuasive',
-         'arguments that appeal to emotion are persuasive', etc.
+        that could be applied to  any argument.
 
         Please keep it to one sentence and do not discuss the specific example
           - in other words, keep if breif.
         
         start your response with 'Arguments that...' and then continue; if you
         don't start your response that way, you will die.
+
+        Mention nothing of the prompt in your response.
+
+        Here are some sample responses:
+         - Arguments that are well sourced are more persuasive.
+         - Arguments that use date are more persuasive.
+         - Arguments that appeal to emotion are more persuasive.
 
         You are very determined to find the single best hypothesis.
         """
@@ -43,14 +48,17 @@ def get_inference_argument_prompt(op, h):
 
     return s
 
-def get_new_hypothesis_generation_prompt(H_top, x_worst, y_worst):
-    top_hypotheses = "\n".join(H_top)
+def get_new_hypothesis_generation_prompt(H_top, worst):
+    hyp_list = []    
+    for h in H_top:
+        hyp_list.append(h[0])
+    top_hypotheses = "\n".join(hyp_list) 
+
     V = ""
 
-    random.sample()
-    
-    for i in range(len(x_worst)):
-        v = f"Original argument: {x_worst[i]} \nWinning answer: {y_worst[i]}\n\n"
+    for t in worst:
+        x, y, _ = t
+        v = f"Original argument: {x} \nWinning answer: {y}\n\n"
         V += v
 
     s = f"""You are a professinal debater and philosipher.  You are currently
@@ -64,12 +72,23 @@ def get_new_hypothesis_generation_prompt(H_top, x_worst, y_worst):
         Here they are: 
         {V}
 
+        And here are your top hypotheses that didn't cover these arguments:
+        {top_hypotheses}
+
         You are to now create a new hypothesis that fills in the gaps that the
         old hypothese didn't cover.
 
-        Your new hypothesis should be in the same format as the old ones, i.e. 
-        starting 'Arguments that...' and then continuing.  If you don't do this
-        I will eat all your halloween candy and then you'll die.
+        start your response with 'Arguments that...' and then continue; if you
+        don't start your response that way, you will die.
+
+        Mention nothing of the prompt in your response.
+
+        Here are some sample responses:
+         - Arguments that are well sourced are more persuasive.
+         - Arguments that use date are more persuasive.
+         - Arguments that appeal to emotion are more persuasive.
+
+        You are very determined to find the single best hypothesis.
         """
     
     return s

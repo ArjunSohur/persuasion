@@ -40,7 +40,7 @@ def load_training_data():
     random.shuffle(training_pairs)
 
     init_pairs = training_pairs[:2]
-    train_pairs = sample_from_training_pairs(training_pairs[2:], 8)
+    train_pairs = sample_from_training_pairs(training_pairs[2:], 3)
 
     print("Retreived successful (utterance, root text) tuples")
 

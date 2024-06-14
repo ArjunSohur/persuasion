@@ -34,7 +34,7 @@ def inference_llm(llm: str, prompt: str):
     try_inference = True
 
     while try_inference:
-        print("Attempting inference")
+        print("\t\tAttempting inference")
         try:
             response = ollama.chat(
             model=llm,
