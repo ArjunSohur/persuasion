@@ -46,3 +46,13 @@ TO RUN THIS CODE, YOU MUST HAVE THE OLLAMA APP INSTALLED
 https://www.ollama.com/
 
 Ollama helps run the llm locally - alternaltively, you can edit ypothesis_generation/llm_ollama.py to use whatever method of llm inference you prefer.  I tried to make the system as llm agnostic as possible outside of the llm file.
+
+### Note that might save some debugging
+To run, run command at root:
+```shell
+python3 main.py
+```
+
+If you don't have some models downloaded, this code might do so for you.  Note that we're talking around 4 Gb of storage if you choose to use ollama's llms.
+
+The embedder is around 2 Gb.
