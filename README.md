@@ -1,4 +1,4 @@
-### Read this part
+## Read this part
 
 The goal of this repo is to do work on persuasion and hypothesis generation - whatever that means.
 
@@ -39,3 +39,8 @@ Original corpus found at: https://convokit.cornell.edu/documentation/winning.htm
 
 Hypothesis generation paper: https://arxiv.org/pdf/2404.04326
 And their code: https://github.com/ChicagoHAI/hypothesis_generation
+
+### Note that might save some debugging
+TO RUN THIS CODE, YOU MUST HAVE THE OLLAMA APP INSTALLED
+https://www.ollama.com/
+Ollama helps run the llm locally - alternaltively, you can edit ypothesis_generation/llm_ollama.py to use whatever method of llm inference you prefer.  I tried to make the system as llm agnostic as possible outside of the llm file.
