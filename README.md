@@ -33,7 +33,7 @@ Obvious shortcomings:
 
 TODO:
  - create different methods of inference
- - improve algorithm
+ - improve algorithm efficiency 
 
 Original corpus found at: https://convokit.cornell.edu/documentation/winning.html#
 
