@@ -42,5 +42,7 @@ And their code: https://github.com/ChicagoHAI/hypothesis_generation
 
 ### Note that might save some debugging
 TO RUN THIS CODE, YOU MUST HAVE THE OLLAMA APP INSTALLED
+
 https://www.ollama.com/
+
 Ollama helps run the llm locally - alternaltively, you can edit ypothesis_generation/llm_ollama.py to use whatever method of llm inference you prefer.  I tried to make the system as llm agnostic as possible outside of the llm file.
