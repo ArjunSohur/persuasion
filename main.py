@@ -19,14 +19,14 @@ if __name__ == "__main__":
 
     main_db_creator(False) # don't want to create the database again
 
-    inital_pairs, train_pairs = load_training_data(num_init_pairs=2, num_train_pairs=2)
+    inital_pairs, train_pairs = load_training_data(num_init_pairs=1, num_train_pairs=2)
     
     H_final = hypogenic(inital_pairs, train_pairs, "llama3", a=0.3, max_r=.75, topn=3)
 
     with open("hypothesis.txt", "w") as f:
         f.write("\n------------------------\n".join(H_final))
 
-    null_hypothesis("hypothesis.txt", "llama3", n_test=8)
+    null_hypothesis("hypothesis_bank.txt", "llama3", n_test=1)
 
     
     

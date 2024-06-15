@@ -5,21 +5,18 @@ from .embed import load_custom_sentence_transformer
 import random
 from math import sqrt, log
 import datetime
-import matplotlib.pyplot as plt
-
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-# plot timestep vs time                                                        #
+# Initialization functions - H and S_i                                         #
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-def plot_timestep_times(timestep_times):
-    plt.plot(timestep_times)
-    plt.title('Time per timestep')
-    plt.ylabel('Time')
-    plt.xlabel('Timestep')
-    plt.show()
+def pr_timesteps(timestep_times):
+    print()
+    for i, t in enumerate(timestep_times):
+        print(f"Time step {i+1}: {t}")
+    print()
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
@@ -313,11 +310,11 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
         x_visited.append(x_t)
 
         print(f"\nTime step {t}")
+        print(f"{t}: Current post: {x_t[:100]}")
         print(f"{t}: Top hypotheses: {H_top(H_rewardscore, n, H)}")
         toph = H_top(H_rewardscore, n, H)
 
         for hypothesis in toph:
-
             hy_dt = datetime.datetime.now()
             h_i = hypothesis[0]
 
@@ -381,8 +378,9 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
 
             print(f"{t}: New hypothesis generated in {datetime.datetime.now() - regret_dt}")
 
-        t += 1
+        
         print(f"Time step {t} completed in {datetime.datetime.now() - timestep_dt}\n")
+        t += 1
         timestep_times.append(datetime.datetime.now() - timestep_dt)
     
     print("Hypothesis reward scores:")
@@ -390,11 +388,7 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
         print(f"  - {h[0][:100]}: {h[1]}")
 
     print(f"Overall time to run hypogenic: {datetime.datetime.now() - overall_dt}")
-    plot_timestep_times(timestep_times)
+    pr_timesteps(timestep_times)
     
     return H
-
-
-
-
 
