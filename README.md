@@ -61,7 +61,7 @@ The way I test the null hypothesis is as follows:
 
 We want to be similar to the winning argument(s) and unsimilar to losing arguemnt(s)
 
-here are the results from running with 20 hypotheses:
+here are the results from running with 20 hypotheses:\
 Null Hypothesis: 5.3284569120268195 for, 2.6715430879731805 against\
 Hypothesis: 5.347286233735214 for, 2.6527137662647857 against
 
