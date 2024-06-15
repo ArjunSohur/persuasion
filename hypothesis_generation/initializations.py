@@ -1,6 +1,7 @@
 import sys
 import os
 import random
+import datetime
 
 # Add the project root to sys.path to handle the relative imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -34,6 +35,8 @@ def sample_from_training_pairs(pairs, n):
 # ---------------------------------------------------------------------------- #
 
 def load_training_data(num_init_pairs:int = 2, num_train_pairs:int = 3):
+    loadind_dt = datetime.datetime.now()
+
     print("Retreiving successful (utterance, root text) tuples")
     training_pairs = get_success_posts_reply_to_text("CMV.db")
 
@@ -42,7 +45,7 @@ def load_training_data(num_init_pairs:int = 2, num_train_pairs:int = 3):
     init_pairs = training_pairs[:num_init_pairs]
     train_pairs = sample_from_training_pairs(training_pairs[num_init_pairs:], num_train_pairs)
 
-    print("Retreived successful (utterance, root text) tuples")
+    print(f"Retreived successful (utterance, root text) tuples in {datetime.datetime.now() - loadind_dt}")
 
     print("Number of succesful arguments:", len(training_pairs), "\n")
 

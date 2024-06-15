@@ -14,14 +14,16 @@ those are more robust.
 
 import ollama
 from ollama import _client, _types
+import datetime
 
 def handle_expection(e, llm) -> bool:
     print(f"Error: {e}")
     if 'not found' in str(e):
         try:
+            download_dt = datetime.datetime.now()
             print(f"\t{llm} not found - Attempting to pull {llm}")
             s = ollama.pull(llm)
-            print(f"\tDownload status: {s}")
+            print(f"\tDownload status: {s} in {datetime.datetime.now() - download_dt}")
             return True
         except e:
             print(f"Failed to pull {llm}")
@@ -34,6 +36,7 @@ def inference_llm(llm: str, prompt: str, sys_prompt: str = None):
     try_inference = True
 
     while try_inference:
+        inderence_dt = datetime.datetime.now()
         print("\t\tAttempting inference")
         if  not sys_prompt:
             try:
@@ -51,6 +54,7 @@ def inference_llm(llm: str, prompt: str, sys_prompt: str = None):
                 try_inference = False
             except _types.ResponseError as e:
                 try_inference = handle_expection(e, llm)
+        print(f"\t\t\tInference complete in {datetime.datetime.now() - inderence_dt}")
             
     return response['message']['content']
 

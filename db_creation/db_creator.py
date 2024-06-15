@@ -1,6 +1,7 @@
 import sqlite3
 import os
-from convokit import Corpus, download, TextParser
+from convokit import Corpus, download
+import datetime
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
@@ -39,6 +40,8 @@ def store_in_db(id, rootid, reply_to, success, speaker_id, text):
 # ---------------------------------------------------------------------------- #
 
 def load_data():
+    load_dt = datetime.datetime.now()
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     corpus_path = os.path.join(script_dir, "winning-args-corpus")
     
@@ -53,7 +56,7 @@ def load_data():
         rel_path = "winning-args-corpus/winning-args-corpus"
         corpus = Corpus(filename=rel_path)
     
-    print("Corpus loaded\n")
+    print(f"Corpus loaded: {datetime.datetime.now() - load_dt}")
     return corpus
 
 # ---------------------------------------------------------------------------- #
@@ -64,6 +67,8 @@ def load_data():
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 def process(corpus):
+    process_dt = datetime.datetime.now()
+
     print("Processing data")
     utterances = list(corpus.iter_utterances())
     lengths = len(utterances)
@@ -87,7 +92,7 @@ def process(corpus):
         speaker_ids[index] = utterance.speaker.id
         text[index] = utterance.text
     
-    print("Successfully processed data\n")
+    print(f"Successfully processed data in {datetime.datetime.now() - process_dt}\n")
     
     return ids, roots, replies_to, successes, speaker_ids, text
 
@@ -114,6 +119,7 @@ def store_data(ids, roots, replies_to, successes, speaker_ids, text):
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 def main_db_creator(do_it: bool = True):
+    main_process_dt = datetime.datetime.now()
 
     if not do_it:
         print("Not creating database")
@@ -123,6 +129,8 @@ def main_db_creator(do_it: bool = True):
     corpus = load_data()
     ids, roots, replies_to, successes, speaker_ids, text = process(corpus)
     store_data(ids, roots, replies_to, successes, speaker_ids, text)
+
+    print(f"Main process completed in {datetime.datetime.now() - main_process_dt}")
 
 # Main execution
 if __name__ == "__main__":

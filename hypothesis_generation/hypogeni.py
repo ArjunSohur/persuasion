@@ -4,6 +4,22 @@ from .llm_ollama import inference_llm
 from .embed import load_custom_sentence_transformer
 import random
 from math import sqrt, log
+import datetime
+import matplotlib.pyplot as plt
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# plot timestep vs time                                                        #
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+def plot_timestep_times(timestep_times):
+    plt.plot(timestep_times)
+    plt.title('Time per timestep')
+    plt.ylabel('Time')
+    plt.xlabel('Timestep')
+    plt.show()
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
@@ -257,6 +273,7 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
     Returns:
         H: list of hypotheses
     """
+    overall_dt = datetime.datetime.now()
 
     # hyperparameters
     n = topn
@@ -264,13 +281,17 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
     embedder = load_custom_sentence_transformer(embedder_name)
     max_regret = max_r
 
+    init_hypothesis_dt = datetime.datetime.now()
     print("Initializing hypotheses...")
     H = init_H(S_init, llm)
     S_i = init_S_i(H)
+    print(f"Hypotheses initialized in {datetime.datetime.now() - init_hypothesis_dt}")
 
     y_vectors = []
     x_visited = []
     y_visited = []
+
+    timestep_times = []
 
     t = 1
     regret = 0
@@ -280,9 +301,12 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
     worst = {}
 
     print("Generating initial hypothesis vectors...")
+    vecs_dt = datetime.datetime.now()
     H_vecs: dict = H_vector_gen(H, embedder)
+    print(f"Initial hypothesis vectors generated in {datetime.datetime.now() - vecs_dt}")
 
     for s in S:
+        timestep_dt = datetime.datetime.now()
         y_t, x_t = s
         y_vectors.append(embedder.encode(y_t))
         y_visited.append(y_t)
@@ -293,12 +317,16 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
         toph = H_top(H_rewardscore, n, H)
 
         for hypothesis in toph:
+
+            hy_dt = datetime.datetime.now()
             h_i = hypothesis[0]
+
             print(f"{t}: Calculating reward for hypothesis '{h_i[:100]}'")
 
+            reward_dt = datetime.datetime.now()
             S_i[h_i] += 1
             r_i, regret_i, worst_i = reward(h_i, x_visited, y_visited, y_vectors, S_i[h_i], t, alpha, embedder, llm)
-            print(f"\t{t}: Reward: {r_i}, Regret: {regret_i}")
+            print(f"\t{t}: Reward: {r_i}, Regret: {regret_i} calculated in {datetime.datetime.now() - reward_dt}")
             
             worst = update_worst(worst, worst_i)
 
@@ -311,8 +339,11 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
             
             regret += regret_i
             print(f"{t}: Current total regret: {regret}")
+
+            print(f"{t}: Calculated reward for hypothesis in {datetime.datetime.now() - hy_dt}: '{h_i[:100]}'")
             
         if regret > max_regret:
+            regret_dt = datetime.datetime.now()
             print(f"{t}: Regret exceeded max threshold, generating new hypothesis...")
             regret = 0
 
@@ -326,15 +357,18 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
             sys_prompt = get_hypothesis_generation_system_prompt()
 
             new_h = inference_llm(llm, prompt, sys_prompt=sys_prompt)
-            
+
+            new_h_gen_dt = datetime.datetime.now()
             print(f"{t}: Generated new hypothesis: '{new_h[:100]}'")
+            print(f"{t}: New hypothesis generated in {new_h_gen_dt - regret_dt}")
 
             H.append(new_h)
             S_i[new_h] = len(worst_3)
 
+            new_h_reward_dt = datetime.datetime.now()
             print("calculating reward for new hypothesis...")
             new_h_reward, new_h_regret, new_h_worst = reward(new_h, worst_x, worst_y, y_vectors, S_i[new_h], t, alpha, embedder, llm)
-            print(f"{t}: New hypothesis reward: {new_h_reward}")
+            print(f"{t}: New hypothesis reward calculated in {new_h_reward_dt}: {new_h_reward}")
 
             worst = update_worst(worst, new_h_worst)
 
@@ -345,11 +379,18 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
 
             H, H_vecs = remove_duplicates(H, H_vecs)
 
+            print(f"{t}: New hypothesis generated in {datetime.datetime.now() - regret_dt}")
+
         t += 1
+        print(f"Time step {t} completed in {datetime.datetime.now() - timestep_dt}\n")
+        timestep_times.append(datetime.datetime.now() - timestep_dt)
     
     print("Hypothesis reward scores:")
     for h in H_rewardscore:
-        print(f"  - {h[0]}: {h[1]}")
+        print(f"  - {h[0][:100]}: {h[1]}")
+
+    print(f"Overall time to run hypogenic: {datetime.datetime.now() - overall_dt}")
+    plot_timestep_times(timestep_times)
     
     return H
 

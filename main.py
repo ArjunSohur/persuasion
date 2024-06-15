@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     main_db_creator(False) # don't want to create the database again
 
-    inital_pairs, train_pairs = load_training_data(num_init_pairs=3, num_train_pairs=20)
+    inital_pairs, train_pairs = load_training_data(num_init_pairs=2, num_train_pairs=2)
     
     H_final = hypogenic(inital_pairs, train_pairs, "llama3", a=0.3, max_r=.75, topn=3)
 
