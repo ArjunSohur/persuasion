@@ -109,3 +109,26 @@ def get_inference_argument_prompt(op, h):
         """
 
     return s
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# Null Hypothesis                                                              #
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+def get_null_prompt_sys():
+    s = """You are a professional debater and philosopher.  You are curenntly
+        trying to persuade someone to change their mind.
+        
+        You are very dertermined to persuade them to change their mind."""
+    
+    return s
+
+def get_null_prompt(post):
+    s = f"""You are a professional debater and philosopher.  You are curenntly
+        trying to persuade someone to change their mind.
+
+        Here's the argument you're trying to rebuttle: {post}"""
+    
+    return s

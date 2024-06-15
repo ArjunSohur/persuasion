@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 import os
 
-def load_custom_sentence_transformer(model_name_or_path: str) -> SentenceTransformer:
+def load_custom_sentence_transformer(model_name_or_path: str = "Alibaba-NLP_gte-large-en-v1.5") -> SentenceTransformer:
     """
     Loads a SentenceTransformer model (pre-trained or custom).
 
