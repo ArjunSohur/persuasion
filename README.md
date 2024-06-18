@@ -51,11 +51,11 @@ The embedder is around 2 Gb.
 The way I test the null hypothesis is as follows:
 1. Get hypothesis bank
 2. Get data in form of "'post': ('Successful argument(s)', 'Unsuccessful argument(s)')"
-3. For each line of data, do the following:
-    3a. Based on post, prompt the llm to generate a counterargument
-    3b. Find best fitting hypothesis based on cosine similarity of post and hypotheses
-    3c. Generate a counter argument uing the hypothesis
-    3d. for counter_argument in {succesful_arguments, unsuccesful_arguments}, add the cosine similarities of counter_argument and {hypothesis generated argument, raw generated argument}
+3. For each line of data, do the following:\
+    3a. Based on post, prompt the llm to generate a counterargument\
+    3b. Find best fitting hypothesis based on cosine similarity of post and hypotheses\
+    3c. Generate a counter argument uing the hypothesis\
+    3d. for counter_argument in {succesful_arguments, unsuccesful_arguments}, add the cosine similarities of counter_argument and {hypothesis generated argument, raw generated argument}\
     3e. normalize the scores for each line of data
 4. Done
 
