@@ -5,3 +5,5 @@ winning-args-corpus/*
 */__pycache__/*
 
 hypothesis_judgement/data.txt
+
+private/*
