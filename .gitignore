@@ -7,3 +7,5 @@ winning-args-corpus/*
 hypothesis_judgement/data.txt
 
 private_/*
+
+hypothesis_judgement/persuasion_classification/*
