@@ -1,6 +1,9 @@
 
-from .prompts import get_hypothesis_generation_prompt, get_inference_argument_prompt, get_new_hypothesis_generation_prompt, get_hypothesis_generation_system_prompt
-from .llm_ollama import inference_llm
+#from .prompts import get_hypothesis_generation_prompt, get_inference_argument_prompt, get_new_hypothesis_generation_prompt, get_hypothesis_generation_system_prompt
+#from .llm_ollama import inference_llm
+
+from .llm import LLM
+from .prompts_llama import get_hypothesis_generation_system_prompt, get_hypothesis_generation_prompt, get_new_hypothesis_generation_prompt, get_inference_argument_prompt, get_null_prompt_sys, get_null_prompt
 from .embed import load_custom_sentence_transformer
 import random
 from math import sqrt, log
@@ -25,7 +28,7 @@ def pr_timesteps(timestep_times):
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-def init_H(S_init, llm):
+def init_H(S_init, llm: LLM):
     H = []
 
     for s in S_init:
@@ -33,7 +36,7 @@ def init_H(S_init, llm):
         prompt = get_hypothesis_generation_prompt(rep, op)
         sys_prompt = get_hypothesis_generation_system_prompt()
 
-        response = inference_llm(llm, prompt, sys_prompt=sys_prompt)
+        response=llm.inference(prompt, system_prompt=sys_prompt)
 
         H.append(response)
     
@@ -178,7 +181,7 @@ def get_worst(worst: dict, n=3):
 """
 The reward function is used to determine how well a hypothesis is performing.
 """
-def reward(h_i, x_visited, y_visited, y_vectors, abs_S_i, t, alpha, embedder, llm):
+def reward(h_i, x_visited, y_visited, y_vectors, abs_S_i, t, alpha, embedder, llm: LLM):
     numerator = 0
 
     # initalizing the worst examples
@@ -188,7 +191,7 @@ def reward(h_i, x_visited, y_visited, y_vectors, abs_S_i, t, alpha, embedder, ll
         y_i = y_vectors[i]
 
         prompt = get_inference_argument_prompt(x, h_i)
-        y_hat_text = inference_llm(llm, prompt)
+        y_hat_text = llm.inference(prompt)
         y_hat = embedder.encode(y_hat_text)
 
         dot = y_i @ y_hat
@@ -272,6 +275,8 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
     """
     overall_dt = datetime.datetime.now()
 
+    llm = LLM(llm)
+
     # hyperparameters
     n = topn
     alpha = a
@@ -353,7 +358,7 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
             prompt = get_new_hypothesis_generation_prompt(new_h_top, worst_3)
             sys_prompt = get_hypothesis_generation_system_prompt()
 
-            new_h = inference_llm(llm, prompt, sys_prompt=sys_prompt)
+            new_h = llm.inference(prompt=prompt, system_prompt=sys_prompt)
 
             new_h_gen_dt = datetime.datetime.now()
             print(f"{t}: Generated new hypothesis: '{new_h[:100]}'")

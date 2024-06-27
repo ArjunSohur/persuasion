@@ -105,9 +105,20 @@ def process(corpus):
 # ---------------------------------------------------------------------------- #
 def store_data(ids, roots, replies_to, successes, speaker_ids, text):
     print("Storing data")
+    count = len(ids)
+    index = 0
+    num_non_null = 0
     for index in range(len(ids)):
-        store_in_db(ids[index], roots[index], replies_to[index], \
-                    successes[index], speaker_ids[index], text[index])
+        if (successes[index] is not None and replies_to[index] == roots[index]) or (ids[index]==roots[index]):
+            store_in_db(ids[index], roots[index], replies_to[index], \
+                        successes[index], speaker_ids[index], text[index])
+            num_non_null += 1
+        index += 1
+
+        if index % 100 == 0: 
+            print(f"Stored {index}/{count} | num non_null = {num_non_null}")
+            num_non_null = 0
+
     print("Successfully stored data\n")
 
 

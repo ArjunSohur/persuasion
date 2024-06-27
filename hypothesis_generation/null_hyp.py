@@ -1,5 +1,6 @@
 import os
-from .llm_ollama import inference_llm
+# from .llm_ollama import inference_llm
+from .llm import LLM
 from .embed import load_custom_sentence_transformer
 from .prompts import get_inference_argument_prompt, get_null_prompt_sys, get_null_prompt
 
@@ -61,8 +62,10 @@ def get_score(response_vector, win, lose, embedder):
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-def null_hypothesis(H_Path, llm, n_test=5):
+def null_hypothesis(H_Path, llm_, n_test=5):
     print(f"\nTESTING NULL HYPOTHESIS WITH {n_test} POSTS\n")
+
+    llm = LLM(llm_)
 
     script_dir = os.getcwd()
     abs_file_path = os.path.join(script_dir, H_Path)
@@ -101,11 +104,11 @@ def null_hypothesis(H_Path, llm, n_test=5):
         h_prompt = get_inference_argument_prompt(post, h)
 
         print("Awaiting LLM response")
-        llm_response = inference_llm(llm, null_prompt, sys_prompt=null_prompt_sys)
+        llm_response = llm.inference(null_prompt, system_prompt=null_prompt_sys)
         print("Got LLM response:", llm_response[:100])
 
         print("Awaiting Hypothesis response")
-        h_response = inference_llm(llm, h_prompt)
+        h_response = llm.inference(h_prompt)
         print("Got Hypothesis response:", h_response[:100])
 
         llm_response_vector = embedder.encode(llm_response)

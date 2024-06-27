@@ -23,12 +23,12 @@ def load_custom_sentence_transformer(model_name_or_path: str = "Alibaba-NLP_gte-
         os.makedirs(cache_folder, exist_ok=True)
 
         # I have device as cpu because I am running this on a mac - obviously, change this to gpu if you have a gpu
-        model = SentenceTransformer(model_name_or_path, cache_folder=cache_folder, trust_remote_code=True, device="cpu")
+        model = SentenceTransformer(model_name_or_path, cache_folder=cache_folder, trust_remote_code=True, device="cuda")
         model.save(model_path)
 
         print("Downloading Complete, processing links ...\n")
     else:
         print(f"Model '{model_name_or_path}' found at '{model_path}'. Loading...")
-        model = SentenceTransformer(model_path, cache_folder=cache_folder, trust_remote_code=True, device="cpu")
+        model = SentenceTransformer(model_path, cache_folder=cache_folder, trust_remote_code=True, device="cuda")
         print("Loading Complete, processing links ...\n")
     return model
