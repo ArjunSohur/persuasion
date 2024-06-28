@@ -3,7 +3,7 @@
 #from .llm_ollama import inference_llm
 
 from .llm import LLM
-from .prompts_llama import get_hypothesis_generation_system_prompt, get_hypothesis_generation_prompt, get_new_hypothesis_generation_prompt, get_inference_argument_prompt, get_null_prompt_sys, get_null_prompt
+from .prompts import get_hypothesis_generation_system_prompt, get_hypothesis_generation_prompt, get_new_hypothesis_generation_prompt, get_inference_argument_prompt, get_null_prompt_sys, get_null_prompt
 from .embed import load_custom_sentence_transformer
 import random
 from math import sqrt, log
@@ -46,7 +46,8 @@ def init_S_i(H):
     S_i = {}
 
     for h in H:
-        S_i[h] = 1
+        print(h)
+        S_i[h[0]] = 1
 
     return S_i
 

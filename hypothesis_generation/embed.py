@@ -13,9 +13,9 @@ def load_custom_sentence_transformer(model_name_or_path: str = "Alibaba-NLP-gte-
     Returns:
         Loaded SentenceTransformer model (SentenceTransformer).
     """
-    # I have device as cuda because I am running this on a gou - obviously, change this to cpu if you have a cpu
-    model = SentenceTransformer("Alibaba-NLP/gte-large-en-v1.5", cache_folder=cache_folder, trust_remote_code=True, device="cuda")
-    model.save(model_path)
+
+    # I have device as cuda because I am running this on a gpu - obviously, change this to cpu if you have a cpu
+    model = SentenceTransformer("Alibaba-NLP/gte-large-en-v1.5", trust_remote_code=True, device="cuda")
 
     print("Downloading Complete, processing links ...\n")
 

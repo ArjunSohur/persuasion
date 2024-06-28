@@ -9,5 +9,20 @@ class LLM:
         self.device = device_map
     
     def inference(self, prompt, system_prompt = ""):
-        combined_prompt = system_prompt + "\n" + prompt
-        return self.llm(combined_prompt)
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt},
+        ]
+
+        # https://huggingface.co/blog/llama3
+        outputs = self.llm(
+            messages,
+            max_new_tokens=256,
+            eos_token_id= self.llm.tokenizer.eos_token_id,
+            pad_token_id=self.llm.tokenizer.eos_token_id,
+            do_sample=True,
+            temperature=0.6,
+            top_p=0.9,
+        )
+
+        return outputs[0]["asistant"]["context"]
