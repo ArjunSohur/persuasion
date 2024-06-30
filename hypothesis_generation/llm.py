@@ -25,4 +25,4 @@ class LLM:
             top_p=0.9,
         )
 
-        return outputs[0]["asistant"]["context"]
+        return outputs[0]["generated_text"][-1]["content"]

@@ -327,7 +327,12 @@ def hypogenic(S_init, S, llm, topn=1, a=0.2, embedder_name="Alibaba-NLP_gte-larg
             print(f"{t}: Calculating reward for hypothesis '{h_i[:100]}'")
 
             reward_dt = datetime.datetime.now()
-            S_i[h_i] += 1
+
+            if not h_i in S_i:
+                S_i[h_i] = 1
+            else:
+                S_i[h_i] += 1
+                
             r_i, regret_i, worst_i = reward(h_i, x_visited, y_visited, y_vectors, S_i[h_i], t, alpha, embedder, llm)
             print(f"\t{t}: Reward: {r_i}, Regret: {regret_i} calculated in {datetime.datetime.now() - reward_dt}")
             

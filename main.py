@@ -15,7 +15,7 @@ from hypothesis_generation.null_hyp import null_hypothesis
 if __name__ == "__main__":
     main_db_creator(False) 
 
-    inital_pairs, train_pairs = load_training_data(num_init_pairs=10, num_train_pairs=500)
+    inital_pairs, train_pairs = load_training_data(num_init_pairs=10, num_train_pairs=50)
     
     # ollama -> llama3
     # huggingface -> meta-llama/Meta-Llama-3-8B
