@@ -132,3 +132,32 @@ def get_null_prompt(post):
         Here's the argument you're trying to rebuttle: {post}"""
     
     return s
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# hypothesis relevance                                                         #
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+def get_vector_gen_prompt(argument, hypothesis):
+    s = f"""You are an advanced language model designed to evaluate the relevance of 
+    hypotheses in relation to given arguments. Given an argument and a hypothesis 
+    (a truism), your task is to determine if the hypothesis is germane 
+    (relevant and appropriate) to the argument. If the hypothesis is germane,
+    output 1. If it is not germane, output 0.
+
+    Do not be generous with your assignment of relevance.  Only give '1' if it
+    really is appropriate.
+
+    Argument: {argument}
+    Hypothesis: {hypothesis}
+
+
+    YOUR OUTPUT CAN ONLY BE A 1 OR A 0.  NO OTHER WORDS OR ANYTHING IS ALLOWED.
+    JUST 1 OR 0.
+    """
+
+    return s
+    
+

@@ -75,7 +75,7 @@ def get_wl_pairs(path_to_db: str, n:int = 5) -> dict:
     ids = ids[:n]
 
     for id in ids:
-        post_id, root_id = id
+        post_id, _ = id
 
         post_cur = cur.execute(f"SELECT text FROM CMV WHERE id = '{post_id}'")
         post_text = post_cur.fetchone()[0]
@@ -104,3 +104,40 @@ def get_wl_pairs(path_to_db: str, n:int = 5) -> dict:
             pairs[post_text] = (win_posts, lose_posts)
 
     return pairs
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# Generate simple data                                                         #
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+def get_simple_data(path_to_db: str) -> dict:
+    con = sqlite3.connect(path_to_db)
+    cur = con.cursor()
+
+    pairs = []
+    ids = get_ids("SELECT id, root_id FROM CMV WHERE id = root_id", path_to_db)
+
+    for id in ids:
+        post_id, _ = id
+
+        post_cur = cur.execute(f"SELECT text FROM CMV WHERE id = '{post_id}'")
+        post = post_cur.fetchone()[0]
+
+        data_cur = cur.execute(f"SELECT id, success FROM CMV WHERE root_id = '{post_id}' AND (success = 1 OR success = 0)")
+        data_ids = data_cur.fetchall()
+
+
+
+        for d in data_ids:
+            rep_cur = cur.execute(f"SELECT text FROM CMV WHERE id = '{d[0]}'")
+
+            reply = rep_cur.fetchone()[0]
+
+            pairs.append((post, reply, d[1]))
+    
+    return pairs
+
+
